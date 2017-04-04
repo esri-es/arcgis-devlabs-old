@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html ng-app="codelab-map">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+  <title>AngularJS, ArcGIS JSAPI and Web Scene</title>
+
+  <link rel="stylesheet" href="//js.arcgis.com/4.3/esri/css/main.css">
+  <style type="text/css">
+  html, body {
+    height: 100%;
+    width: 100%;
+  }
+  .container{
+    width: 1024px;
+    margin: 0 auto;
+  }
+  esri-scene-view,
+  .esri-view{
+    width: 100%;
+    height: 400px;
+  }
+
+  /*
+  .slidesDiv {
+    color: black;
+    overflow-y: auto;
+    font-size: 0.68em;
+  }
+  .slide {
+    cursor: pointer;
+    margin-bottom: 6px;
+    display: inline-block;
+    margin-right: 1rem;
+  }
+  .activeSlide {
+    box-shadow: 0 0 12px #ffffff;
+    background-color: #efefef;
+  }*/
+  </style>
+</head>
+<body ng-controller="MapController as vm" class="calcite calcite-maps calcite-nav-top calcite-margin-all calcite-zoom-top-left calcite-layout-inline-left">
+  <div class="container">
+    <h1>AngularJS + ArcGIS API for JS + Web Scene</h1>
+
+    <!--<h2>Slides</h2>
+    <div class="slidesDiv" ng-show="vm.slides.length > 0">
+      <div class="slide" ng-repeat="slide in vm.slides" ng-click="vm.onSlideClick(slide)">
+        <div>{{slide.title.text}}</div>
+        <img ng-src="{{slide.thumbnail.url}}" title="{{slide.title.text}}" ng-class="{activeSlide: slide.isActiveSlide}">
+      </div>
+    </div>-->
+
+    <h2>Mapa</h2>
+    <esri-scene-view map="vm.map" on-load="vm.onViewLoaded" on-error="vm.onViewError"></esri-scene-view>
+  </div>
+
+  <script src="//js.arcgis.com/4.3/"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+  <script src="//unpkg.com/angular-esri-map@2"></script>
+
+  <script type="text/javascript">
+  var app = angular.module('codelab-map', ['esri.map'])
+  .controller('MapController', function(esriLoader, $scope) {
+    var self = this;
+    self.slides = [];
+    self.sceneView = null;
+
+    esriLoader.require([
+      'esri/portal/PortalItem',
+      'esri/WebScene',
+      'esri/webscene/Slide'
+    ]).then(function(esriModules) {
+      var PortalItem = esriModules[0];
+      var WebScene = esriModules[1];
+      var Slide = esriModules[2];
+
+      var webScene = new WebScene({
+        portalItem: new PortalItem({
+          id: 'b88b39c565f148b4a13124039b4fedde'
+        })
+      });
+
+
+      self.map = webScene;
+
+      /*
+      self.onViewLoaded = function(view) {
+        self.sceneView = view;
+        var createSlideDiv = document.getElementsByClassName('createSlideDiv')[0];
+        var slidesDiv = document.getElementsByClassName('slidesDiv')[0];
+        self.slides = view.map.presentation.slides.toArray();
+      };
+
+      self.onSlideClick = function(slide) {
+        self.slides.forEach(function(slide) {
+          slide.isActiveSlide = false;
+        });
+        slide.isActiveSlide = true;
+        slide.applyTo(self.sceneView);
+      };
+      */
+
+    });
+  });
+
+  </script>
+</body>
+</html>
